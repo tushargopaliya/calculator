@@ -1,29 +1,40 @@
-const display = document.getElementById('display');
-const buttons = document.querySelectorAll('button');
+// Select input box and all buttons
+const input = document.querySelector("input");
+const buttons = document.querySelectorAll("button");
 
 let currentInput = "";
 
+// Add click event listener to each button
 buttons.forEach(button => {
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
         const value = button.textContent;
 
-        if (value === "AC") {
-            currentInput = "";
-            display.value = "";
-        } else if (value === "DEL") {
-            currentInput = currentInput.slice(0, -1);
-            display.value = currentInput;
-        } else if (value === "=") {
-            try {
-                currentInput = eval(currentInput).toString();
-                display.value = currentInput;
-            } catch (err) {
-                display.value = "Error";
+        switch (value) {
+            case "AC":
                 currentInput = "";
-            }
-        } else {
-            currentInput += value;
-            display.value = currentInput;
+                input.value = "";
+                break;
+
+            case "DEL":
+                currentInput = currentInput.slice(0, -1);
+                input.value = currentInput;
+                break;
+
+            case "=":
+                try {
+                    // Replace \ with / for division
+                    const expression = currentInput.replace(/\\/g, "/");
+                    currentInput = eval(expression).toString();
+                    input.value = currentInput;
+                } catch {
+                    input.value = "Error";
+                    currentInput = "";
+                }
+                break;
+
+            default:
+                currentInput += value;
+                input.value = currentInput;
         }
     });
 });
